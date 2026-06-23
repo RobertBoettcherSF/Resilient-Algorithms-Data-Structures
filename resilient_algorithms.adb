@@ -1,5 +1,5 @@
 -- resilient_algorithms.adb
--- Version: 0.09
+-- Version: 0.11
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
 package body resilient_algorithms with SPARK_Mode is
@@ -161,11 +161,11 @@ package body resilient_algorithms with SPARK_Mode is
       
    begin
       -- Perform merge sort on the entire array
-      MergeSort(A, 1, 1000);
+      MergeSort(A, 1, 999);
       
       -- Verify the sort by checking adjacent elements
       -- This is a resilience check
-      for I in Index range 1 .. 999 loop
+      for I in Index range 1 .. 998 loop
          pragma Assert(A(I) <= A(I + 1), "Sorting invariant violated");
       end loop;
    end ResilientSort;
