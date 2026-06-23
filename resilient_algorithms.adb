@@ -2,7 +2,7 @@
 -- Version: 0.03
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
-package body ResilientAlgorithms is
+package body resilient_algorithms is
 
    -- Helper function to compute checksum for error detection
    function ComputeChecksum(A : Heap_Array; N : Array_Size) return Integer is
@@ -270,4 +270,4 @@ package body ResilientAlgorithms is
       return Q.Size;
    end SizeOf;
 
-end ResilientAlgorithms;
+end resilient_algorithms;

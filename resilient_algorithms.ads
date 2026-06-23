@@ -2,7 +2,7 @@
 -- Version: 0.03
 -- Specifications and contracts for resilient sorting algorithm and resilient priority queue
 
-package ResilientAlgorithms with SPARK_Mode is
+package resilient_algorithms with SPARK_Mode is
    -- Type definitions
    type Element is range 1 .. 1000;
    type Index is range 1 .. 1000;
@@ -62,4 +62,4 @@ package ResilientAlgorithms with SPARK_Mode is
        Pre => True,
        Post => SizeOf'Result = Q.Size;
 
-end ResilientAlgorithms;
+end resilient_algorithms;
