@@ -1,12 +1,11 @@
 -- resilient_algorithms.ads
--- Version: 0.04
+-- Version: 0.05
 -- Specifications and contracts for resilient sorting algorithm and resilient priority queue
 
 package resilient_algorithms with SPARK_Mode is
    -- Type definitions
    type Element is range 1 .. 1000;
-   type Index is range 1 .. 1000;
-   type Array_Size is range 0 .. 1000;
+   type Index is range 0 .. 1000;
    
    -- Array type for sorting
    type Arr is array (Index range 1 .. 1000) of Element;
@@ -17,7 +16,7 @@ package resilient_algorithms with SPARK_Mode is
    
    type PriorityQueue is record
       Data : Heap_Array;
-      Size : Array_Size := 0;
+      Size : Index := 0;
       -- Redundant copies for fault detection
       Copy1 : Heap_Array;
       Copy2 : Heap_Array;
@@ -57,7 +56,7 @@ package resilient_algorithms with SPARK_Mode is
        Pre => True,
        Post => IsEmpty'Result = (Q.Size = 0);
    
-   function SizeOf(Q : PriorityQueue) return Array_Size
+   function SizeOf(Q : PriorityQueue) return Index
      with
        Pre => True,
        Post => SizeOf'Result = Q.Size;

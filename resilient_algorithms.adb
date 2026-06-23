@@ -1,11 +1,11 @@
 -- resilient_algorithms.adb
--- Version: 0.04
+-- Version: 0.05
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
 package body resilient_algorithms is
 
    -- Helper function to compute checksum for error detection
-   function ComputeChecksum(A : Heap_Array; N : Array_Size) return Integer is
+   function ComputeChecksum(A : Heap_Array; N : Index) return Integer is
       Sum : Integer := 0;
    begin
       for I in Index range 1 .. N loop
@@ -15,7 +15,7 @@ package body resilient_algorithms is
    end ComputeChecksum;
 
    -- Helper function to copy array (for redundancy)
-   procedure CopyArray(Source : Heap_Array; Target : out Heap_Array; N : Array_Size) is
+   procedure CopyArray(Source : Heap_Array; Target : out Heap_Array; N : Index) is
    begin
       for I in Index range 1 .. N loop
          Target(I) := Source(I);
@@ -23,7 +23,7 @@ package body resilient_algorithms is
    end CopyArray;
 
    -- Helper function to check if two arrays are equal
-   function ArraysEqual(A, B : Heap_Array; N : Array_Size) return Boolean is
+   function ArraysEqual(A, B : Heap_Array; N : Index) return Boolean is
    begin
       for I in Index range 1 .. N loop
          if A(I) /= B(I) then
@@ -195,14 +195,14 @@ package body resilient_algorithms is
       Q.Size := Q.Size + 1;
       
       -- Add element to the end
-      Q.Data(Index(Q.Size)) := Val;
+      Q.Data(Q.Size) := Val;
       
       -- Update redundant copies
-      Q.Copy1(Index(Q.Size)) := Val;
-      Q.Copy2(Index(Q.Size)) := Val;
+      Q.Copy1(Q.Size) := Val;
+      Q.Copy2(Q.Size) := Val;
       
       -- Bubble up to maintain heap property
-      Current := Index(Q.Size);
+      Current := Q.Size;
       loop
          Parent := Current / 2;
          exit when Parent = 0 or Q.Data(Parent) >= Q.Data(Current);
@@ -239,7 +239,7 @@ package body resilient_algorithms is
       Val := Q.Data(1);
       
       -- Move last element to root
-      Q.Data(1) := Q.Data(Index(Q.Size));
+      Q.Data(1) := Q.Data(Q.Size);
       Q.Copy1(1) := Q.Data(1);
       Q.Copy2(1) := Q.Data(1);
       
@@ -248,7 +248,7 @@ package body resilient_algorithms is
       
       -- Sift down to maintain heap property
       if Q.Size > 0 then
-         SiftDown(Q, 1, Index(Q.Size));
+         SiftDown(Q, 1, Q.Size);
       end if;
       
       -- Update checksum
@@ -265,7 +265,7 @@ package body resilient_algorithms is
    end IsEmpty;
 
    -- Implementation of SizeOf
-   function SizeOf(Q : PriorityQueue) return Array_Size is
+   function SizeOf(Q : PriorityQueue) return Index is
    begin
       return Q.Size;
    end SizeOf;
