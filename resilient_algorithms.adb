@@ -1,5 +1,5 @@
 -- resilient_algorithms.adb
--- Version: 0.03
+-- Version: 0.04
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
 package body resilient_algorithms is
