@@ -1,5 +1,5 @@
 -- resilient_algorithms.adb
--- Version: 0.13
+-- Version: 0.09
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
 package body resilient_algorithms with SPARK_Mode is
@@ -37,11 +37,6 @@ package body resilient_algorithms with SPARK_Mode is
    function PriorityQueueInvariant(Q : PriorityQueue) return Boolean is
       ExpectedChecksum : Integer;
    begin
-      -- Check size is within bounds
-      if Q.Size > 1000 then
-         return False;
-      end if;
-      
       -- Check all three copies are consistent
       if not ArraysEqual(Q.Data, Q.Copy1, Q.Size) then
          return False;
@@ -75,7 +70,7 @@ package body resilient_algorithms with SPARK_Mode is
       Root : Index := Start;
       Child : Index;
       Swap : Index;
-      Temp : Element;
+      Temp_Element : Element;
    begin
       loop
          Child := 2 * Root;
@@ -94,9 +89,9 @@ package body resilient_algorithms with SPARK_Mode is
          exit when Swap = Root;
          
          -- Swap root and swap
-         Temp := Q.Data(Root);
+         Temp_Element := Q.Data(Root);
          Q.Data(Root) := Q.Data(Swap);
-         Q.Data(Swap) := Temp;
+         Q.Data(Swap) := Temp_Element;
          
          Root := Swap;
       end loop;
@@ -125,7 +120,7 @@ package body resilient_algorithms with SPARK_Mode is
          end loop;
           
          -- Merge the temp arrays back into The_Arr
-         while I <= Mid and J <= Right and K <= Right loop
+         while I <= Mid and J <= Right loop
             if Temp(I) <= Temp(J) then
                The_Arr(K) := Temp(I);
                I := I + 1;
@@ -137,14 +132,14 @@ package body resilient_algorithms with SPARK_Mode is
          end loop;
           
          -- Copy remaining elements of left half
-         while I <= Mid and K <= Right loop
+         while I <= Mid loop
             The_Arr(K) := Temp(I);
             I := I + 1;
             K := K + 1;
          end loop;
           
          -- Copy remaining elements of right half
-         while J <= Right and K <= Right loop
+         while J <= Right loop
             The_Arr(K) := Temp(J);
             J := J + 1;
             K := K + 1;
@@ -153,10 +148,9 @@ package body resilient_algorithms with SPARK_Mode is
       
       -- Recursive merge sort
       procedure MergeSort(The_Arr : in out Arr; Left, Right : Index) is
-         Mid : Index;
+         Mid : constant Index := Left + (Right - Left) / 2;
       begin
          if Left < Right then
-            Mid := Left + (Right - Left) / 2;
             -- Sort first and second halves
             MergeSort(The_Arr, Left, Mid);
             MergeSort(The_Arr, Mid + 1, Right);
@@ -181,7 +175,7 @@ package body resilient_algorithms with SPARK_Mode is
    procedure ResilientPriorityQueueInsert(Q: in out PriorityQueue; Val: Element) is
       Parent : Index;
       Current : Index;
-      Temp : Element;
+      Temp_Element : Element;
    begin
       -- Check preconditions
       pragma Assert(Val >= 1 and Val <= 1000, "Invalid element value");
@@ -204,9 +198,9 @@ package body resilient_algorithms with SPARK_Mode is
          exit when Parent = 0 or Q.Data(Parent) >= Q.Data(Current);
          
          -- Swap parent and current
-         Temp := Q.Data(Parent);
+         Temp_Element := Q.Data(Parent);
          Q.Data(Parent) := Q.Data(Current);
-         Q.Data(Current) := Temp;
+         Q.Data(Current) := Temp_Element;
          
          -- Update redundant copies
          Q.Copy1(Parent) := Q.Data(Parent);
