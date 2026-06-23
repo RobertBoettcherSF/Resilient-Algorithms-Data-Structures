@@ -1,11 +1,11 @@
--- resilient_algorithms.gpr
+-- resilientalgorithms.gpr
 -- Version: 0.02
 -- GNAT project file for resilient algorithms in SPARK
 
 project ResilientAlgorithms is
 
    for Source_Dirs use ("");
-   for Main use ("resilient_algorithms.adb");
+   for Main use ("resilientalgorithms.adb");
    for Object_Dir use "obj";
    for Exec_Dir use "bin";
 

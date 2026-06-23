@@ -1,4 +1,4 @@
--- resilient_algorithms.ads
+-- resilientalgorithms.ads
 -- Version: 0.02
 -- Specifications and contracts for resilient sorting algorithm and resilient priority queue
 
