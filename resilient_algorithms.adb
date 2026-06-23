@@ -1,8 +1,8 @@
 -- resilient_algorithms.adb
--- Version: 0.05
+-- Version: 0.06
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
-package body resilient_algorithms is
+package body resilient_algorithms with SPARK_Mode is
 
    -- Helper function to compute checksum for error detection
    function ComputeChecksum(A : Heap_Array; N : Index) return Integer is
