@@ -1,5 +1,5 @@
 -- resilient_algorithms.adb
--- Version: 0.07
+-- Version: 0.09
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
 package body resilient_algorithms with SPARK_Mode is
@@ -154,24 +154,22 @@ package body resilient_algorithms with SPARK_Mode is
       end Merge;
       
       -- Recursive merge sort
-      procedure MergeSort(The_Arr : in out Arr; Temp : out Arr; Left, Right : Index) is
+      procedure MergeSort(The_Arr : in out Arr; Left, Right : Index) is
+         Mid : Index;
       begin
          if Left < Right then
-            declare
-               Mid : Index := Left + (Right - Left) / 2;
-            begin
-               -- Sort first and second halves
-               MergeSort(The_Arr, Temp1, Left, Mid);
-               MergeSort(The_Arr, Temp2, Mid + 1, Right);
-               -- Merge the sorted halves
-               Merge(The_Arr, Temp3, Left, Mid, Right);
-            end;
+            Mid := Left + (Right - Left) / 2;
+            -- Sort first and second halves
+            MergeSort(The_Arr, Left, Mid);
+            MergeSort(The_Arr, Mid + 1, Right);
+            -- Merge the sorted halves
+            Merge(The_Arr, Temp3, Left, Mid, Right);
          end if;
       end MergeSort;
       
    begin
       -- Perform merge sort on the entire array
-      MergeSort(A, Temp1, 1, 1000);
+      MergeSort(A, 1, 1000);
       
       -- Verify the sort by checking adjacent elements
       -- This is a resilience check
