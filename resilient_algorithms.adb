@@ -1,5 +1,5 @@
 -- resilient_algorithms.adb
--- Version: 0.06
+-- Version: 0.07
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
 package body resilient_algorithms with SPARK_Mode is
