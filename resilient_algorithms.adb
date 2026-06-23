@@ -8,7 +8,7 @@ package body resilient_algorithms is
    function ComputeChecksum(A : Heap_Array; N : Array_Size) return Integer is
       Sum : Integer := 0;
    begin
-      for I in 1 .. N loop
+      for I in Index range 1 .. N loop
          Sum := Sum + Integer(A(I));
       end loop;
       return Sum;
@@ -17,7 +17,7 @@ package body resilient_algorithms is
    -- Helper function to copy array (for redundancy)
    procedure CopyArray(Source : Heap_Array; Target : out Heap_Array; N : Array_Size) is
    begin
-      for I in 1 .. N loop
+      for I in Index range 1 .. N loop
          Target(I) := Source(I);
       end loop;
    end CopyArray;
@@ -25,7 +25,7 @@ package body resilient_algorithms is
    -- Helper function to check if two arrays are equal
    function ArraysEqual(A, B : Heap_Array; N : Array_Size) return Boolean is
    begin
-      for I in 1 .. N loop
+      for I in Index range 1 .. N loop
          if A(I) /= B(I) then
             return False;
          end if;
@@ -58,7 +58,7 @@ package body resilient_algorithms is
       end if;
       
       -- Check heap property: parent >= children
-      for I in 1 .. Q.Size / 2 loop
+      for I in Index range 1 .. Q.Size / 2 loop
          if 2 * I <= Q.Size and Q.Data(I) < Q.Data(2 * I) then
             return False;
          end if;
@@ -116,23 +116,23 @@ package body resilient_algorithms is
       Temp3 : Arr;
       
       -- Merge two sorted subarrays
-      procedure Merge(Arr : in out Arr; Temp : out Arr; Left, Mid, Right : Index) is
+      procedure Merge(The_Arr : in out Arr; Temp : out Arr; Left, Mid, Right : Index) is
          I : Index := Left;
          J : Index := Mid + 1;
          K : Index := Left;
       begin
          -- Copy data to temp array
-         for L in Left .. Right loop
-            Temp(L) := Arr(L);
+         for L in Index range Left .. Right loop
+            Temp(L) := The_Arr(L);
          end loop;
           
-         -- Merge the temp arrays back into Arr
+         -- Merge the temp arrays back into The_Arr
          while I <= Mid and J <= Right loop
             if Temp(I) <= Temp(J) then
-               Arr(K) := Temp(I);
+               The_Arr(K) := Temp(I);
                I := I + 1;
             else
-               Arr(K) := Temp(J);
+               The_Arr(K) := Temp(J);
                J := J + 1;
             end if;
             K := K + 1;
@@ -140,31 +140,31 @@ package body resilient_algorithms is
           
          -- Copy remaining elements of left half
          while I <= Mid loop
-            Arr(K) := Temp(I);
+            The_Arr(K) := Temp(I);
             I := I + 1;
             K := K + 1;
          end loop;
           
          -- Copy remaining elements of right half
          while J <= Right loop
-            Arr(K) := Temp(J);
+            The_Arr(K) := Temp(J);
             J := J + 1;
             K := K + 1;
          end loop;
       end Merge;
       
       -- Recursive merge sort
-      procedure MergeSort(Arr : in out Arr; Temp : out Arr; Left, Right : Index) is
+      procedure MergeSort(The_Arr : in out Arr; Temp : out Arr; Left, Right : Index) is
       begin
          if Left < Right then
             declare
                Mid : Index := Left + (Right - Left) / 2;
             begin
                -- Sort first and second halves
-               MergeSort(Arr, Temp1, Left, Mid);
-               MergeSort(Arr, Temp2, Mid + 1, Right);
+               MergeSort(The_Arr, Temp1, Left, Mid);
+               MergeSort(The_Arr, Temp2, Mid + 1, Right);
                -- Merge the sorted halves
-               Merge(Arr, Temp3, Left, Mid, Right);
+               Merge(The_Arr, Temp3, Left, Mid, Right);
             end;
          end if;
       end MergeSort;
@@ -175,7 +175,7 @@ package body resilient_algorithms is
       
       -- Verify the sort by checking adjacent elements
       -- This is a resilience check
-      for I in 1 .. 999 loop
+      for I in Index range 1 .. 999 loop
          pragma Assert(A(I) <= A(I + 1), "Sorting invariant violated");
       end loop;
    end ResilientSort;
@@ -195,14 +195,14 @@ package body resilient_algorithms is
       Q.Size := Q.Size + 1;
       
       -- Add element to the end
-      Q.Data(Q.Size) := Val;
+      Q.Data(Index(Q.Size)) := Val;
       
       -- Update redundant copies
-      Q.Copy1(Q.Size) := Val;
-      Q.Copy2(Q.Size) := Val;
+      Q.Copy1(Index(Q.Size)) := Val;
+      Q.Copy2(Index(Q.Size)) := Val;
       
       -- Bubble up to maintain heap property
-      Current := Q.Size;
+      Current := Index(Q.Size);
       loop
          Parent := Current / 2;
          exit when Parent = 0 or Q.Data(Parent) >= Q.Data(Current);
@@ -239,7 +239,7 @@ package body resilient_algorithms is
       Val := Q.Data(1);
       
       -- Move last element to root
-      Q.Data(1) := Q.Data(Q.Size);
+      Q.Data(1) := Q.Data(Index(Q.Size));
       Q.Copy1(1) := Q.Data(1);
       Q.Copy2(1) := Q.Data(1);
       
@@ -248,7 +248,7 @@ package body resilient_algorithms is
       
       -- Sift down to maintain heap property
       if Q.Size > 0 then
-         SiftDown(Q, 1, Q.Size);
+         SiftDown(Q, 1, Index(Q.Size));
       end if;
       
       -- Update checksum
