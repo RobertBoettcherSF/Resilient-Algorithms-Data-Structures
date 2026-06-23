@@ -1,0 +1,14 @@
+-- resilient_algorithms.gpr
+-- Version: 0.01
+-- GNAT project file for resilient algorithms in SPARK
+
+project ResilientAlgorithms is
+
+   for Source_Dirs use (".");
+   for Main use ("resilient_algorithms.adb");
+
+   package Compiler is
+      for Switches ("Ada") use ("-gnatwa");
+   end Compiler;
+
+end ResilientAlgorithms;
