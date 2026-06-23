@@ -1,5 +1,5 @@
 -- resilientalgorithms.gpr
--- Version: 0.02
+-- Version: 0.03
 -- GNAT project file for resilient algorithms in SPARK
 
 project ResilientAlgorithms is

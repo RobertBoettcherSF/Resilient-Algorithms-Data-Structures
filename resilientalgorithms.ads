@@ -1,5 +1,5 @@
 -- resilientalgorithms.ads
--- Version: 0.02
+-- Version: 0.03
 -- Specifications and contracts for resilient sorting algorithm and resilient priority queue
 
 package ResilientAlgorithms with SPARK_Mode is
