@@ -1,11 +1,11 @@
 -- resilient_algorithms.adb
--- Version: 0.11
+-- Version: 0.13
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
 package body resilient_algorithms with SPARK_Mode is
 
    -- Helper function to compute checksum for error detection
-   function ComputeChecksum(A : Heap_Array; N : Index) return Integer is
+   function ComputeChecksum(A : Heap_Array; N : Index_Or_Zero) return Integer is
       Sum : Integer := 0;
    begin
       for I in Index range 1 .. N loop
@@ -15,7 +15,7 @@ package body resilient_algorithms with SPARK_Mode is
    end ComputeChecksum;
 
    -- Helper function to copy array (for redundancy)
-   procedure CopyArray(Source : Heap_Array; Target : out Heap_Array; N : Index) is
+   procedure CopyArray(Source : Heap_Array; Target : out Heap_Array; N : Index_Or_Zero) is
    begin
       for I in Index range 1 .. N loop
          Target(I) := Source(I);
@@ -23,7 +23,7 @@ package body resilient_algorithms with SPARK_Mode is
    end CopyArray;
 
    -- Helper function to check if two arrays are equal
-   function ArraysEqual(A, B : Heap_Array; N : Index) return Boolean is
+   function ArraysEqual(A, B : Heap_Array; N : Index_Or_Zero) return Boolean is
    begin
       for I in Index range 1 .. N loop
          if A(I) /= B(I) then
@@ -161,11 +161,11 @@ package body resilient_algorithms with SPARK_Mode is
       
    begin
       -- Perform merge sort on the entire array
-      MergeSort(A, 1, 999);
+      MergeSort(A, 1, 1000);
       
       -- Verify the sort by checking adjacent elements
       -- This is a resilience check
-      for I in Index range 1 .. 998 loop
+      for I in Index range 1 .. 999 loop
          pragma Assert(A(I) <= A(I + 1), "Sorting invariant violated");
       end loop;
    end ResilientSort;
@@ -255,7 +255,7 @@ package body resilient_algorithms with SPARK_Mode is
    end IsEmpty;
 
    -- Implementation of SizeOf
-   function SizeOf(Q : PriorityQueue) return Index is
+   function SizeOf(Q : PriorityQueue) return Index_Or_Zero is
    begin
       return Q.Size;
    end SizeOf;
