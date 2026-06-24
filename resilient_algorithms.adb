@@ -1,5 +1,5 @@
 -- resilient_algorithms.adb
--- Version: 0.13
+-- Version: 0.15
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
 package body resilient_algorithms with SPARK_Mode is
@@ -53,7 +53,7 @@ package body resilient_algorithms with SPARK_Mode is
       end if;
       
       -- Check heap property: parent >= children
-      for I in Index range 1 .. Q.Size / 2 loop
+      for I in Index range 1 .. Index_Or_Zero'Min(Q.Size, 500) loop
          if 2 * I <= Q.Size and Q.Data(I) < Q.Data(2 * I) then
             return False;
          end if;
@@ -185,14 +185,14 @@ package body resilient_algorithms with SPARK_Mode is
       Q.Size := Q.Size + 1;
       
       -- Add element to the end
-      Q.Data(Q.Size) := Val;
+      Q.Data(Index(Q.Size)) := Val;
       
       -- Update redundant copies
-      Q.Copy1(Q.Size) := Val;
-      Q.Copy2(Q.Size) := Val;
+      Q.Copy1(Index(Q.Size)) := Val;
+      Q.Copy2(Index(Q.Size)) := Val;
       
       -- Bubble up to maintain heap property
-      Current := Q.Size;
+      Current := Index(Q.Size);
       loop
          Parent := Current / 2;
          exit when Parent = 0 or Q.Data(Parent) >= Q.Data(Current);
@@ -229,7 +229,7 @@ package body resilient_algorithms with SPARK_Mode is
       Val := Q.Data(1);
       
       -- Move last element to root
-      Q.Data(1) := Q.Data(Q.Size);
+      Q.Data(1) := Q.Data(Index(Q.Size));
       Q.Copy1(1) := Q.Data(1);
       Q.Copy2(1) := Q.Data(1);
       
@@ -238,7 +238,7 @@ package body resilient_algorithms with SPARK_Mode is
       
       -- Sift down to maintain heap property
       if Q.Size > 0 then
-         SiftDown(Q, 1, Q.Size);
+         SiftDown(Q, 1, Index(Q.Size));
       end if;
       
       -- Update checksum
