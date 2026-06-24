@@ -1,5 +1,5 @@
 -- resilient_algorithms.adb
--- Version: 0.26
+-- Version: 0.27
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
 package body resilient_algorithms with SPARK_Mode is
@@ -107,7 +107,7 @@ package body resilient_algorithms with SPARK_Mode is
    begin
       for I in Index range 2 .. 999 loop
          declare
-            Key : Element := A(I);
+            Key : constant Element := A(I);
             J : Index := I - 1;
          begin
             while J >= 1 and A(J) > Key loop
