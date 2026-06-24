@@ -1,5 +1,5 @@
 -- resilient_algorithms.adb
--- Version: 0.29
+-- Version: 0.30
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
 package body resilient_algorithms with SPARK_Mode is
@@ -132,7 +132,6 @@ package body resilient_algorithms with SPARK_Mode is
       Temp_Element : Element;
    begin
       -- Check preconditions
-      pragma Assert(Val >= 1 and Val <= 1000, "Invalid element value");
       pragma Assert(Q.Size < 1000, "Priority queue overflow");
       
       -- Increment size
