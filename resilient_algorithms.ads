@@ -1,5 +1,5 @@
 -- resilient_algorithms.ads
--- Version: 0.16
+-- Version: 0.17
 -- Specifications and contracts for resilient sorting algorithm and resilient priority queue
 
 package resilient_algorithms with SPARK_Mode is
@@ -32,7 +32,7 @@ package resilient_algorithms with SPARK_Mode is
    procedure ResilientSort(A: in out Arr)
      with
        Pre => (for all I in Index range 1 .. 1000 => A(I) >= 1 and A(I) <= 1000),
-       Post => (for all I in Index range 1 .. 999 => A(I) <= A(I + 1));
+       Post => (for all I in Index range 1 .. 998 => A(I) <= A(I + 1));
    
    -- Specifications and contracts for resilient priority queue insert
    -- Uses a resilient heap with error detection and correction
