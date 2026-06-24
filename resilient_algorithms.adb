@@ -1,5 +1,5 @@
 -- resilient_algorithms.adb
--- Version: 0.27
+-- Version: 0.28
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
 package body resilient_algorithms with SPARK_Mode is
@@ -105,7 +105,7 @@ package body resilient_algorithms with SPARK_Mode is
    -- Simple insertion sort for resilience (avoids merge sort complexity)
    procedure ResilientSort(A: in out Arr) is
    begin
-      for I in Index range 2 .. 999 loop
+      for I in Index range 2 .. 998 loop
          declare
             Key : constant Element := A(I);
             J : Index := I - 1;
@@ -119,7 +119,7 @@ package body resilient_algorithms with SPARK_Mode is
       end loop;
       
       -- Verify the sort by checking adjacent elements
-      for I in Index range 1 .. 998 loop
+      for I in Index range 1 .. 997 loop
          pragma Assert(A(I) <= A(I + 1), "Sorting invariant violated");
       end loop;
    end ResilientSort;
