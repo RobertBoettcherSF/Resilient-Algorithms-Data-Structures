@@ -1,5 +1,5 @@
 -- main.adb
--- Version: 0.03
+-- Version: 0.04
 -- Test program for resilient algorithms
 
 with resilient_algorithms; use resilient_algorithms;
@@ -32,8 +32,14 @@ begin
       Test_Array(I) := 1;
    end loop;
    
-   Put("Array before sorting: ");
+   Put("Array before sorting (first 20): ");
    for I in Index range 1 .. 20 loop
+      Put(Integer(Test_Array(I)));
+      Put(" ");
+   end loop;
+   New_Line;
+   Put("Array before sorting (last 20): ");
+   for I in Index range 981 .. 1000 loop
       Put(Integer(Test_Array(I)));
       Put(" ");
    end loop;
@@ -42,8 +48,14 @@ begin
    -- Sort the array
    ResilientSort(Test_Array);
    
-   Put("Array after sorting: ");
+   Put("Array after sorting (first 20): ");
    for I in Index range 1 .. 20 loop
+      Put(Integer(Test_Array(I)));
+      Put(" ");
+   end loop;
+   New_Line;
+   Put("Array after sorting (last 20): ");
+   for I in Index range 981 .. 1000 loop
       Put(Integer(Test_Array(I)));
       Put(" ");
    end loop;

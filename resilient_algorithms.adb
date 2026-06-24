@@ -1,5 +1,5 @@
 -- resilient_algorithms.adb
--- Version: 0.28
+-- Version: 0.29
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
 package body resilient_algorithms with SPARK_Mode is
@@ -54,10 +54,10 @@ package body resilient_algorithms with SPARK_Mode is
       
       -- Check heap property: parent >= children
       for I in Index range 1 .. Q.Size / 2 loop
-         if 2 * I <= Q.Size and Q.Data(I) < Q.Data(2 * I) then
+         if 2 * I <= Q.Size and then Q.Data(I) < Q.Data(2 * I) then
             return False;
          end if;
-         if 2 * I + 1 <= Q.Size and Q.Data(I) < Q.Data(2 * I + 1) then
+         if 2 * I + 1 <= Q.Size and then Q.Data(I) < Q.Data(2 * I + 1) then
             return False;
          end if;
       end loop;
@@ -76,13 +76,13 @@ package body resilient_algorithms with SPARK_Mode is
          Child := 2 * Root;
          
          -- Find the largest child
-         if Child <= Finish and Q.Data(Child) > Q.Data(Root) then
+         if Child <= Finish and then Q.Data(Child) > Q.Data(Root) then
             Swap := Child;
          else
             Swap := Root;
          end if;
          
-         if Child + 1 <= Finish and Q.Data(Child + 1) > Q.Data(Swap) then
+         if Child + 1 <= Finish and then Q.Data(Child + 1) > Q.Data(Swap) then
             Swap := Child + 1;
          end if;
          
@@ -105,12 +105,12 @@ package body resilient_algorithms with SPARK_Mode is
    -- Simple insertion sort for resilience (avoids merge sort complexity)
    procedure ResilientSort(A: in out Arr) is
    begin
-      for I in Index range 2 .. 998 loop
+      for I in Index range 2 .. 1000 loop
          declare
             Key : constant Element := A(I);
             J : Index := I - 1;
          begin
-            while J >= 1 and A(J) > Key loop
+            while J >= 1 and then A(J) > Key loop
                A(J + 1) := A(J);
                J := J - 1;
             end loop;
@@ -119,7 +119,7 @@ package body resilient_algorithms with SPARK_Mode is
       end loop;
       
       -- Verify the sort by checking adjacent elements
-      for I in Index range 1 .. 997 loop
+      for I in Index range 1 .. 999 loop
          pragma Assert(A(I) <= A(I + 1), "Sorting invariant violated");
       end loop;
    end ResilientSort;
@@ -149,7 +149,7 @@ package body resilient_algorithms with SPARK_Mode is
       Current := Q.Size;
       loop
          Parent := Current / 2;
-         exit when Parent = 0 or Q.Data(Parent) >= Q.Data(Current);
+         exit when Parent = 0 or else Q.Data(Parent) >= Q.Data(Current);
          
          -- Swap parent and current
          Temp_Element := Q.Data(Parent);
