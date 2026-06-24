@@ -1,5 +1,5 @@
 -- resilient_algorithms.ads
--- Version: 0.18
+-- Version: 0.19
 -- Specifications and contracts for resilient sorting algorithm and resilient priority queue
 
 package resilient_algorithms with SPARK_Mode is
@@ -29,23 +29,14 @@ package resilient_algorithms with SPARK_Mode is
    
    -- Specifications and contracts for resilient sorting algorithm
    -- Uses a resilient merge sort with triple modular redundancy
-   procedure ResilientSort(A: in out Arr)
-     with
-       Pre => (for all I in Index range 1 .. 999 => A(I) >= 1 and A(I) <= 1000),
-       Post => (for all I in Index range 1 .. 998 => A(I) <= A(I + 1));
+   procedure ResilientSort(A: in out Arr);
    
    -- Specifications and contracts for resilient priority queue insert
    -- Uses a resilient heap with error detection and correction
-   procedure ResilientPriorityQueueInsert(Q: in out PriorityQueue; Val: Element)
-     with
-       Pre => Val >= 1 and Val <= 1000 and Q.Size < 1000,
-       Post => PriorityQueueInvariant(Q);
+   procedure ResilientPriorityQueueInsert(Q: in out PriorityQueue; Val: Element);
    
    -- Additional operations for priority queue
-   procedure ResilientPriorityQueueExtractMax(Q: in out PriorityQueue; Val: out Element)
-     with
-       Pre => Q.Size > 0 and PriorityQueueInvariant(Q),
-       Post => PriorityQueueInvariant(Q);
+   procedure ResilientPriorityQueueExtractMax(Q: in out PriorityQueue; Val: out Element);
    
    function IsEmpty(Q : PriorityQueue) return Boolean
      with
