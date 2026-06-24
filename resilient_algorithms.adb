@@ -1,11 +1,11 @@
 -- resilient_algorithms.adb
--- Version: 0.15
+-- Version: 0.17
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
 package body resilient_algorithms with SPARK_Mode is
 
    -- Helper function to compute checksum for error detection
-   function ComputeChecksum(A : Heap_Array; N : Index_Or_Zero) return Integer is
+   function ComputeChecksum(A : Heap_Array; N : Index) return Integer is
       Sum : Integer := 0;
    begin
       for I in Index range 1 .. N loop
@@ -15,7 +15,7 @@ package body resilient_algorithms with SPARK_Mode is
    end ComputeChecksum;
 
    -- Helper function to copy array (for redundancy)
-   procedure CopyArray(Source : Heap_Array; Target : out Heap_Array; N : Index_Or_Zero) is
+   procedure CopyArray(Source : Heap_Array; Target : out Heap_Array; N : Index) is
    begin
       for I in Index range 1 .. N loop
          Target(I) := Source(I);
@@ -23,7 +23,7 @@ package body resilient_algorithms with SPARK_Mode is
    end CopyArray;
 
    -- Helper function to check if two arrays are equal
-   function ArraysEqual(A, B : Heap_Array; N : Index_Or_Zero) return Boolean is
+   function ArraysEqual(A, B : Heap_Array; N : Index) return Boolean is
    begin
       for I in Index range 1 .. N loop
          if A(I) /= B(I) then
@@ -53,7 +53,7 @@ package body resilient_algorithms with SPARK_Mode is
       end if;
       
       -- Check heap property: parent >= children
-      for I in Index range 1 .. Index_Or_Zero'Min(Q.Size, 500) loop
+      for I in Index range 1 .. Q.Size / 2 loop
          if 2 * I <= Q.Size and Q.Data(I) < Q.Data(2 * I) then
             return False;
          end if;
@@ -185,14 +185,14 @@ package body resilient_algorithms with SPARK_Mode is
       Q.Size := Q.Size + 1;
       
       -- Add element to the end
-      Q.Data(Index(Q.Size)) := Val;
+      Q.Data(Q.Size) := Val;
       
       -- Update redundant copies
-      Q.Copy1(Index(Q.Size)) := Val;
-      Q.Copy2(Index(Q.Size)) := Val;
+      Q.Copy1(Q.Size) := Val;
+      Q.Copy2(Q.Size) := Val;
       
       -- Bubble up to maintain heap property
-      Current := Index(Q.Size);
+      Current := Q.Size;
       loop
          Parent := Current / 2;
          exit when Parent = 0 or Q.Data(Parent) >= Q.Data(Current);
@@ -229,7 +229,7 @@ package body resilient_algorithms with SPARK_Mode is
       Val := Q.Data(1);
       
       -- Move last element to root
-      Q.Data(1) := Q.Data(Index(Q.Size));
+      Q.Data(1) := Q.Data(Q.Size);
       Q.Copy1(1) := Q.Data(1);
       Q.Copy2(1) := Q.Data(1);
       
@@ -238,7 +238,7 @@ package body resilient_algorithms with SPARK_Mode is
       
       -- Sift down to maintain heap property
       if Q.Size > 0 then
-         SiftDown(Q, 1, Index(Q.Size));
+         SiftDown(Q, 1, Q.Size);
       end if;
       
       -- Update checksum
@@ -255,7 +255,7 @@ package body resilient_algorithms with SPARK_Mode is
    end IsEmpty;
 
    -- Implementation of SizeOf
-   function SizeOf(Q : PriorityQueue) return Index_Or_Zero is
+   function SizeOf(Q : PriorityQueue) return Index is
    begin
       return Q.Size;
    end SizeOf;
