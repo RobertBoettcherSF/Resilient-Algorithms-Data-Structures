@@ -1,10 +1,12 @@
 # Resilient-Algorithms-Data-Structures
 
-This repository provides a formally verified Ada SPARK implementation of resilient algorithms and data structures as described in the research paper "Exploiting non-constant safe memory in resilient algorithms and data structures". The implementation focuses on resilient sorting and priority queues.
+This repository provides an Ada implementation of resilient algorithms and data structures as described in the research paper "Exploiting non-constant safe memory in resilient algorithms and data structures". The implementation focuses on resilient sorting and priority queues.
 
 ## Overview
 
-This project demonstrates **resilient algorithms** implemented in **Ada with SPARK** for formal verification. The algorithms use **triple modular redundancy (TMR)** and **checksum verification** to detect and handle faults in memory.
+This project demonstrates **resilient algorithms** implemented in **Ada**. The algorithms use **triple modular redundancy (TMR)** and **checksum verification** to detect and handle faults in memory.
+
+> **Note**: This implementation uses standard Ada (not Ada SPARK) as certain parts were difficult to verify with GNATPROVE.
 
 ## Features
 
@@ -29,7 +31,6 @@ This project demonstrates **resilient algorithms** implemented in **Ada with SPA
 - **Triple Modular Redundancy (TMR)**: All priority queue data is stored in triplicate
 - **Checksum Validation**: Integer checksum of all elements for error detection
 - **Runtime Assertions**: `pragma Assert` statements verify invariants at runtime
-- **SPARK Contracts**: Formal pre/post conditions for verification (commented out to avoid warnings)
 
 ## Implementation Details
 
@@ -70,12 +71,6 @@ The test program demonstrates:
 2. **Priority Queue**: Inserts elements, extracts in descending order, verifies size
 
 ## Verification
-
-### SPARK Mode
-The package is implemented with `SPARK_Mode` enabled, allowing for:
-- Static analysis of contracts
-- Formal proof of correctness (with gnatprove)
-- Runtime verification via assertions
 
 ### Current Status
 - ✅ Compiles with zero warnings

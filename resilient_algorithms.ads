@@ -1,8 +1,8 @@
 -- resilient_algorithms.ads
--- Version: 0.20
+-- Version: 0.21
 -- Specifications and contracts for resilient sorting algorithm and resilient priority queue
 
-package resilient_algorithms with SPARK_Mode is
+package resilient_algorithms is
    -- Type definitions
    type Element is range 1 .. 1000;
    type Index is range 0 .. 1000;
