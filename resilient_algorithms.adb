@@ -1,5 +1,5 @@
 -- resilient_algorithms.adb
--- Version: 0.24
+-- Version: 0.26
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
 package body resilient_algorithms with SPARK_Mode is
@@ -102,69 +102,23 @@ package body resilient_algorithms with SPARK_Mode is
       Q.Checksum := ComputeChecksum(Q.Data, Q.Size);
    end SiftDown;
 
-   -- Implementation of resilient sorting algorithm
-   -- Uses a resilient merge sort with triple modular redundancy
+   -- Simple insertion sort for resilience (avoids merge sort complexity)
    procedure ResilientSort(A: in out Arr) is
-      -- Temporary array for merge sort
-      Temp : Arr;
-      
-      -- Merge two sorted subarrays
-      procedure Merge(The_Arr : in out Arr; Left, Mid, Right : Index) is
-         I : Index := Left;
-         J : Index := Mid + 1;
-         K : Index := Left;
-      begin
-         -- Copy data to temp array
-         for L in Index range Left .. Right loop
-            Temp(L) := The_Arr(L);
-         end loop;
-          
-         -- Merge the temp arrays back into The_Arr
-         while I <= Mid and J <= Right and K <= Right loop
-            if Temp(I) <= Temp(J) then
-               The_Arr(K) := Temp(I);
-               I := I + 1;
-            else
-               The_Arr(K) := Temp(J);
-               J := J + 1;
-            end if;
-            K := K + 1;
-         end loop;
-          
-         -- Copy remaining elements of left half
-         while I <= Mid and K <= Right loop
-            The_Arr(K) := Temp(I);
-            I := I + 1;
-            K := K + 1;
-         end loop;
-          
-         -- Copy remaining elements of right half
-         while J <= Right and K <= Right loop
-            The_Arr(K) := Temp(J);
-            J := J + 1;
-            K := K + 1;
-         end loop;
-      end Merge;
-      
-      -- Recursive merge sort
-      procedure MergeSort(The_Arr : in out Arr; Left, Right : Index) is
-         Mid : constant Index := Left + (Right - Left) / 2;
-      begin
-         if Left < Right then
-            -- Sort first and second halves
-            MergeSort(The_Arr, Left, Mid);
-            MergeSort(The_Arr, Mid + 1, Right);
-            -- Merge the sorted halves
-            Merge(The_Arr, Left, Mid, Right);
-         end if;
-      end MergeSort;
-      
    begin
-      -- Perform merge sort on the array (1 to 999 to avoid range issues)
-      MergeSort(A, 1, 999);
+      for I in Index range 2 .. 999 loop
+         declare
+            Key : Element := A(I);
+            J : Index := I - 1;
+         begin
+            while J >= 1 and A(J) > Key loop
+               A(J + 1) := A(J);
+               J := J - 1;
+            end loop;
+            A(J + 1) := Key;
+         end;
+      end loop;
       
       -- Verify the sort by checking adjacent elements
-      -- This is a resilience check
       for I in Index range 1 .. 998 loop
          pragma Assert(A(I) <= A(I + 1), "Sorting invariant violated");
       end loop;
