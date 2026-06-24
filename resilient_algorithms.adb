@@ -1,5 +1,5 @@
 -- resilient_algorithms.adb
--- Version: 0.19
+-- Version: 0.20
 -- Implementation of resilient sorting algorithm and resilient priority queue
 
 package body resilient_algorithms with SPARK_Mode is
@@ -120,27 +120,27 @@ package body resilient_algorithms with SPARK_Mode is
          end loop;
           
          -- Merge the temp arrays back into The_Arr
-         while I <= Mid and J <= Right and K < 1000 loop
+         while I <= Mid and J <= Right and K <= 1000 loop
             if Temp(I) <= Temp(J) then
-               The_Arr(K + 1) := Temp(I);
+               The_Arr(K) := Temp(I);
                I := I + 1;
             else
-               The_Arr(K + 1) := Temp(J);
+               The_Arr(K) := Temp(J);
                J := J + 1;
             end if;
             K := K + 1;
          end loop;
           
          -- Copy remaining elements of left half
-         while I <= Mid and K < 1000 loop
-            The_Arr(K + 1) := Temp(I);
+         while I <= Mid and K <= 1000 loop
+            The_Arr(K) := Temp(I);
             I := I + 1;
             K := K + 1;
          end loop;
           
          -- Copy remaining elements of right half
-         while J <= Right and K < 1000 loop
-            The_Arr(K + 1) := Temp(J);
+         while J <= Right and K <= 1000 loop
+            The_Arr(K) := Temp(J);
             J := J + 1;
             K := K + 1;
          end loop;
